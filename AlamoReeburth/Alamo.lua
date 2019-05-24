@@ -287,22 +287,23 @@ if englishClass == 'DRUID' then
 	local title = AlamoOptions:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	local enableButton = CreateFrame('CheckButton', "AlamoOptionsCheck", AlamoOptions, "InterfaceOptionsCheckButtonTemplate")
 	local chanceSlider = CreateFrame('SLIDER', "AlamoOptionsSlider", AlamoOptions, "OptionsSliderTemplate")
+	local chatDropdown = CreateFrame("Frame", "AlamoOptionsChatDropdown", AlamoOptions, "UIDropDownMenuTemplate")
 
-	local function checkboxOnClick(self)
+	local function CheckboxOnClick(self)
 		Settings.Enabled = self:GetChecked()
 		PlaySound(Settings.Enabled and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 		self:SetChecked(Settings.Enabled)
 	end
 	
-	local function checkBoxOnShow(self)
+	local function CheckBoxOnShow(self)
 		self:SetChecked(Settings.Enabled)
 	end
 
-	local function sliderOnShow(self)
+	local function SliderOnShow(self)
 		chanceSlider:SetValue(Settings.Chance)
 	end
 	
-	local function sliderOnChange(self)
+	local function SliderOnChange(self)
 		Settings.Chance = self:GetValue()
 	end
 
@@ -315,20 +316,61 @@ if englishClass == 'DRUID' then
 	InterfaceOptions_AddCategory(AlamoOptions, addonName)
 
 	--Enable Checkbox--
-	enableButton:SetScript('OnShow', checkBoxOnShow)
-	enableButton:SetScript('OnClick', checkboxOnClick)
+	enableButton:SetScript('OnShow', CheckBoxOnShow)
+	enableButton:SetScript('OnClick', CheckboxOnClick)
 	getglobal(enableButton:GetName() .. 'Text'):SetText("Enable Alamo");
 	enableButton.tooltipText = 'Enable Alamo Dialogue'
 	enableButton:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
 
 	--Chance Slider--
-	chanceSlider:SetScript('OnShow', sliderOnShow)
-	chanceSlider:SetScript('OnValueChanged', sliderOnChange)
-	chanceSlider:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -50)
+	chanceSlider:SetScript('OnShow', SliderOnShow)
+	chanceSlider:SetScript('OnValueChanged', SliderOnChange)
+	chanceSlider:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -54)
 	chanceSlider:SetMinMaxValues(1, 100)
 	chanceSlider:SetValueStep(1)
 	chanceSlider:SetObeyStepOnDrag(true)
 	getglobal(chanceSlider:GetName() .. 'Text'): SetText("Chance to Speak")
+
+	--chat channel dropdown--
+	local chatDropdownLabel = AlamoOptions:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
+	chatDropdownLabel:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -94)
+	chatDropdownLabel:SetText("Chat Channel:")
+
+	chatDropdown:SetPoint("TOPLEFT", chatDropdownLabel, "BOTTOMLEFT", -16, -4)
+	local function ChatDropdown_OnClick(self, arg1, arg2, checked)
+		Settings.ChatType = arg1
+		UIDropDownMenu_SetText(chatDropdown, Settings.ChatType)
+	end
+	local function ChatDropdown_Menu(frame, level, menuList)
+		local info = UIDropDownMenu_CreateInfo()
+		info.func = ChatDropdown_OnClick
+ 		info.text, info.arg1 = "GUILD", "GUILD"
+ 		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "INSTANCE_CHAT", "INSTANCE_CHAT"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "OFFICER", "OFFICER"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "PARTY", "PARTY"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "PRIVATE", "PRIVATE"
+		UIDropDownMenu_AddButton(info)
+ 		info.text, info.arg1 = "RAID", "RAID"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "RAID_WARNING", "RAID_WARNING"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "SAY", "SAY"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "WHISPER", "WHISPER"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "YELL", "YELL"
+		UIDropDownMenu_AddButton(info)
+	end
+	local function DropdownOnShow(self)
+		UIDropDownMenu_SetText(self, Settings.ChatType)
+	end
+	UIDropDownMenu_Initialize(chatDropdown, ChatDropdown_Menu)
+	chatDropdown:SetScript('OnShow', DropdownOnShow)
+
 else
 	SLASH_ALAMO1 = '/alamo';
 	function SlashCmdList.ALAMO(msg, editbox)
