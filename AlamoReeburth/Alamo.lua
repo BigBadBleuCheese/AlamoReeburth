@@ -281,6 +281,54 @@ if englishClass == 'DRUID' then
 			end
 		end
 	end
+
+	-- Create Alamo options tab in Interface->Addons
+	local AlamoOptions = CreateFrame('Frame', nil, InterfaceOptionsFramePanelContainer)
+	local title = AlamoOptions:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	local enableButton = CreateFrame('CheckButton', "AlamoOptionsCheck", AlamoOptions, "InterfaceOptionsCheckButtonTemplate")
+	local chanceSlider = CreateFrame('SLIDER', "AlamoOptionsSlider", AlamoOptions, "OptionsSliderTemplate")
+
+	local function checkboxOnClick(self)
+		Settings.Enabled = self:GetChecked()
+		PlaySound(Settings.Enabled and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+		self:SetChecked(Settings.Enabled)
+	end
+	
+	local function checkBoxOnShow(self)
+		self:SetChecked(Settings.Enabled)
+	end
+
+	local function sliderOnShow(self)
+		chanceSlider:SetValue(Settings.Chance)
+	end
+	
+	local function sliderOnChange(self)
+		Settings.Chance = self:GetValue()
+	end
+
+	AlamoOptions:Hide()
+	AlamoOptions:SetAllPoints()
+	AlamoOptions.name = "Alamo Reeburth"
+
+	title:SetPoint("TOPLEFT", 16, -16)
+	title:SetText(AlamoOptions.name)
+	InterfaceOptions_AddCategory(AlamoOptions, addonName)
+
+	--Enable Checkbox--
+	enableButton:SetScript('OnShow', checkBoxOnShow)
+	enableButton:SetScript('OnClick', checkboxOnClick)
+	getglobal(enableButton:GetName() .. 'Text'):SetText("Enable Alamo");
+	enableButton.tooltipText = 'Enable Alamo Dialogue'
+	enableButton:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
+
+	--Chance Slider--
+	chanceSlider:SetScript('OnShow', sliderOnShow)
+	chanceSlider:SetScript('OnValueChanged', sliderOnChange)
+	chanceSlider:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -50)
+	chanceSlider:SetMinMaxValues(1, 100)
+	chanceSlider:SetValueStep(1)
+	chanceSlider:SetObeyStepOnDrag(true)
+	getglobal(chanceSlider:GetName() .. 'Text'): SetText("Chance to Speak")
 else
 	SLASH_ALAMO1 = '/alamo';
 	function SlashCmdList.ALAMO(msg, editbox)
