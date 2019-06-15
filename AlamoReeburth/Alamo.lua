@@ -1,5 +1,7 @@
-local localizedClass, englishClass, classIndex = UnitClass('player')
-if englishClass == 'DRUID' then
+local _, _, classIndex = UnitClass('player')
+if classIndex == 11 then
+	local isVanilla = select(4, GetBuildInfo()) < 20000
+
 	if Settings == nil then
 		Settings = {
 			Enabled = true,
@@ -23,9 +25,7 @@ if englishClass == 'DRUID' then
 			"Tehm whos bare durids, can B 4 tank.",
 			"Man, sum bare druids can maek sum peeps poop in feer bc/ tehms so storng.",
 			"A bare durid haf many armors & when a thing hits durid, maybe thing gets borken hand LOL!",
-			"Bare durids is 4 funs when u can charje & stun & haf sum armors lol.",
-			"ONE THING NOW IS BARES IS CAN DUNCE! DUN DUN DUN! LOL!",
-			"IS YOU LIEK A NISE HOT CUP O MANGEL?"
+			"Bare durids is 4 funs when u can charje & stun & haf sum armors lol."
 		},
 
 		Cat = {
@@ -35,8 +35,7 @@ if englishClass == 'DRUID' then
 			"OK now sum durid is cat. Cat durid, tehm dosent heel.  Cat uis for fite.",
 			"CAT DURIDS is no spam moonfare! Sum cat durids dosent no wut is uh moonfare!",
 			"CAT DURID IS NOT SPEEK MOONFARE!",
-			"cat durids is life on MANE street LOL!",
-			"cat durids is love some mangel!"
+			"cat durids is life on MANE street LOL!"
 		},
 
 		Travel = {
@@ -70,6 +69,12 @@ if englishClass == 'DRUID' then
 		}
 	}
 
+	if not isVanilla then
+		table.insert(Messages.Bear, "ONE THING NOW IS BARES IS CAN DUNCE! DUN DUN DUN! LOL!")
+		table.insert(Messages.Bear, "IS YOU LIEK A NISE HOT CUP O MANGEL?")
+		table.insert(Messages.Cat, "cat durids is love some mangel!")
+	end
+
 	local DruidForms = {
 		Bear = 5487,
 		Cat = 768,
@@ -79,6 +84,10 @@ if englishClass == 'DRUID' then
 		Moonkin = 24858,
 		Tree = 114282
 	}
+
+	if isVanilla then
+		DruidForms.Aquatic = 1066
+	end
 
 	local BalanceAffinityMoonkin = 197625
 	local IncarnationTreeOfLife = 33891
@@ -124,11 +133,13 @@ if englishClass == 'DRUID' then
 	end
 
 	local function ChangedForm()
-		local texture, isActive, isCastable, spellID
+		local spellID
 		local index = GetShapeshiftForm()
 		if index > 0 then
-			texture, isActive, isCastable, spellID = GetShapeshiftFormInfo(index)
-			if spellID == DruidForms.Travel then
+			_, _, _, spellID = GetShapeshiftFormInfo(index)
+			if spellID == DruidForms.DireBear then
+				spellID = DruidForms.Bear
+			elseif spellID == DruidForms.Travel and not isVanilla then
 				if IsSwimming() then
 					spellID = DruidForms.Aquatic
 				elseif IsFlyableArea() then
