@@ -318,7 +318,7 @@ if englishClass == 'DRUID' then
 	--Enable Checkbox--
 	enableButton:SetScript('OnShow', CheckBoxOnShow)
 	enableButton:SetScript('OnClick', CheckboxOnClick)
-	getglobal(enableButton:GetName() .. 'Text'):SetText("Enable Alamo");
+	getglobal(enableButton:GetName() .. 'Text'):SetText("Enable Chance to Speak on Shift");
 	enableButton.tooltipText = 'Enable Alamo Dialogue'
 	enableButton:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
 
@@ -329,7 +329,7 @@ if englishClass == 'DRUID' then
 	chanceSlider:SetMinMaxValues(1, 100)
 	chanceSlider:SetValueStep(1)
 	chanceSlider:SetObeyStepOnDrag(true)
-	getglobal(chanceSlider:GetName() .. 'Text'): SetText("Chance to Speak")
+	getglobal(chanceSlider:GetName() .. 'Text'): SetText("Chance to Speak on Shift")
 
 	--chat channel dropdown--
 	local chatDropdownLabel = AlamoOptions:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
