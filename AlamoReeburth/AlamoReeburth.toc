@@ -1,4 +1,4 @@
-## Interface: 80100
+## Interface: 80200
 ## Title: Alamo Reeburth
 ## Notes: Alamo teechs u 2 play DURID!
 ## Version: 1.1
