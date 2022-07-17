@@ -1,6 +1,10 @@
 local _, _, classIndex = UnitClass('player')
 if classIndex == 11 then
-	local isVanilla = select(4, GetBuildInfo()) < 20000
+	local interfaceVersion = select(4, GetBuildInfo())
+	local isClassic = interfaceVersion < 20000
+	local isBCC = interfaceVersion >= 20000 and interfaceVersion < 30000
+	local isWotLKC = interfaceVersion >= 30000 and interfaceVersion < 40000
+	local isRetail = not (isClassic or isBCC or isWotLKC)
 
 	if Settings == nil then
 		Settings = {
@@ -69,23 +73,35 @@ if classIndex == 11 then
 		}
 	}
 
-	if not isVanilla then
+	if not isClassic then
 		table.insert(Messages.Bear, "ONE THING NOW IS BARES IS CAN DUNCE! DUN DUN DUN! LOL!")
 		table.insert(Messages.Bear, "IS YOU LIEK A NISE HOT CUP O MANGEL?")
 		table.insert(Messages.Cat, "cat durids is love some mangel!")
 	end
 
 	local DruidForms = {
-		Bear = 5487,
 		Cat = 768,
 		Travel = 783,
 		Aquatic = 784,
 		Flight = 785,
+		Bear = 5487,
+		DireBear = 9634,
 		Moonkin = 24858,
-		Tree = 114282
+		ClassicFlight = 33943,
+		SwiftFlight = 40120,
+		TreeOfLife = 48371,
+		Treant = 114282
 	}
 
-	if isVanilla then
+	local DruidFormToMessages = {
+		ClassicFlight = 'Flight',
+		DireBear = 'Bear',
+		SwiftFlight = 'Flight',
+		Treant = 'Tree',
+		TreeOfLife = 'Tree'
+	}
+
+	if not isRetail then
 		DruidForms.Aquatic = 1066
 	end
 
@@ -108,12 +124,20 @@ if classIndex == 11 then
 	local function Speak(spellID)
 		local messageTable
 		if spellID then
+			local messageTableKey
 			for druidFormsKey, druidFormsValue in pairs(DruidForms) do
 				if spellID == druidFormsValue then
-					messageTable = Messages[druidFormsKey]
+					messageTableKey = druidFormsKey
 					break
 				end
 			end
+			for druidFormToMessageKey, druidFormToMessageValue in pairs(DruidFormToMessages) do
+				if messageTableKey == druidFormToMessageKey then
+					messageTableKey = druidFormToMessageValue
+					break
+				end
+			end
+			messageTable = Messages[messageTableKey]
 		else
 			messageTable = Messages.Caster
 		end
@@ -139,7 +163,7 @@ if classIndex == 11 then
 			_, _, _, spellID = GetShapeshiftFormInfo(index)
 			if spellID == DruidForms.DireBear then
 				spellID = DruidForms.Bear
-			elseif spellID == DruidForms.Travel and not isVanilla then
+			elseif spellID == DruidForms.Travel and isRetail then
 				if IsSwimming() then
 					spellID = DruidForms.Aquatic
 				elseif IsFlyableArea() then
@@ -153,7 +177,7 @@ if classIndex == 11 then
 		end
 		if CurrentForm ~= spellID then
 			if CurrentIncarnationTreeOfLifeActive then
-				RollToSpeak(DruidForms.Tree)
+				RollToSpeak(DruidForms.TreeOfLife)
 				CurrentForm = spellID
 			else
 				local validSpellID = not spellID
@@ -205,7 +229,7 @@ if classIndex == 11 then
 				local incarnationTreeOfLifeActive = IsIncarnationTreeOfLifeActive()
 				if incarnationTreeOfLifeActive ~= CurrentIncarnationTreeOfLifeActive then
 					if incarnationTreeOfLifeActive then
-						RollToSpeak(DruidForms.Tree)
+						RollToSpeak(DruidForms.TreeOfLife)
 					else
 						RollToSpeak(CurrentForm)
 					end
@@ -233,7 +257,7 @@ if classIndex == 11 then
 				ShowHelp()
 			elseif command == 'force' then
 				if CurrentIncarnationTreeOfLifeActive then
-					Speak(DruidForms.Tree)
+					Speak(DruidForms.TreeOfLife)
 				else
 					Speak(CurrentForm)
 				end

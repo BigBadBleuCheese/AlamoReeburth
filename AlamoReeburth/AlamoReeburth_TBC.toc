@@ -1,0 +1,7 @@
+## Interface: 20504
+## Title: Alamo Reeburth
+## Notes: Alamo teechs u 2 play DURID!
+## Version: 1.2
+## SavedVariablesPerCharacter: Settings
+
+Alamo.lua
