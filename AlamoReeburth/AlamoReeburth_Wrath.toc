@@ -1,6 +1,6 @@
 ## Interface: 30400
 ## Title: Alamo Reeburth
-## Notes: Alamo teechs u 2 play DURID!
+## Notes: ALAMO teeches u 2 Burnin Croosaid!
 ## Version: 1.2
 ## SavedVariablesPerCharacter: Settings
 

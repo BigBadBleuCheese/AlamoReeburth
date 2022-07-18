@@ -1,6 +1,6 @@
 ## Interface: 90205
 ## Title: Alamo Reeburth
-## Notes: Alamo teechs u 2 play DURID!
+## Notes: ALAMO teech a CATTOKISSEM!
 ## Version: 1.2
 ## SavedVariablesPerCharacter: Settings
 
