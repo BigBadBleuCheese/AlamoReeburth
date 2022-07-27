@@ -10,7 +10,7 @@ if classIndex == 11 then
 		Settings = {
 			Enabled = true,
 			Chance = 5,
-			ChatType = 'SAY'
+			ChatType = 'DYNAMIC'
 		}
 	end
 
@@ -21,8 +21,7 @@ if classIndex == 11 then
 			"DURIDS IS 4 haf FUN TIME WIT FRENS",
 			"every1 is like a fun time durid!!",
 			"Durids is storng for bare or cat or seel or WHATVER",
-			"DURIDS IS ALWAYS FRENDS, SO PLAY NISE, OK?",
-			"DURIDS IS HARD, & BUT STRONG"
+			"DURIDS IS ALWAYS FRENDS, SO PLAY NISE, OK?"
 		},
 
 		Bear = {
@@ -74,40 +73,10 @@ if classIndex == 11 then
 		}
 	}
 
-	if isClassic then
-		table.insert(Messages.Bear, "SUM PEEPLE THINK DURIDS IS CANT BE BARE AND CAN ONLY HEEL AND THEM DOSENT")
-	end
-
 	if not isClassic then
 		table.insert(Messages.Bear, "ONE THING NOW IS BARES IS CAN DUNCE! DUN DUN DUN! LOL!")
-		table.insert(Messages.Bear, "DUNCING BARES IS CAN MAKE HAPPY TIMES FOR UDDER FRENDS!")
 		table.insert(Messages.Bear, "IS YOU LIEK A NISE HOT CUP O MANGEL?")
-		table.insert(Messages.Bear, "NOW BARE DURIDS IS CAN TANK GOOD!")
-		table.insert(Messages.Bear, "REMEMBERS- HEEL BARES DURID! BARE DURIDS IS STORNG FREND!")
-		table.insert(Messages.Caster, "DURIDS IS ALSO VERY STORNG 4 PVP! BARES AND CATS FITE, MOONKIN MAKES MOON STUFF, AND SUM DURIDS IS 4 HEEL!")
-		table.insert(Messages.Caster, "DON'T BE SCARED OF FITE, ONLY REMEMBER IMPORTANT DURID STUFF!")
-		table.insert(Messages.Caster, "REMEMBER, DURIDS IS BEST!")
-		table.insert(Messages.Caster, "WHEN U IS HAF SUM FUN, ALL DURIDS IS HAF SUM FUN WIT U!!")
 		table.insert(Messages.Cat, "cat durids is love some mangel!")
-	end
-
-	if isBCC then
-		table.insert(Messages.Caster, "now, in BURN CROOSAID, is many things new durids is can do, what wuzznt cood do B4!")
-	end
-
-	if isWotLKC or isRetail then
-		table.insert(Messages.Moonkin, "But Crazed MOON DURID, is ok to make a kiss right on the ECLIPS!")
-	end
-
-	if isRetail then
-		table.insert(Messages.Bear, "OK now a Bare, him like sum HEVY METAL! BARE GOTTA THRASH. Just liek a thing wares short and high top sneeker and shake long hare reeeely fast!")
-		table.insert(Messages.Bear, "But also, ware sum plug in an ear wen you make this THRASH, becawse it make a thing bleed!")
-		table.insert(Messages.Bear, "Also, all bare make peeple go fast when him RORE!! This is good, because a bare is deseptively fast. A Fast BARE, this is danjerus BARE!")
-		table.insert(Messages.Bear, "Bare don't even allow in OLIMPIC, becawse wonse upon a time, a bare run a rase in OLIMPIC. Maybe he dosen't win, but everduddy win after, becawse a BARE EAT ALL OTHER RASE MEN!")
-		table.insert(Messages.Bear, "Don't rase a hungry bare, is what sumbuddy shuld tell peeple.")
-		table.insert(Messages.Caster, "So DURID gonna be so storng heer, maybe everbuddy gonna be a durid thees day!")
-		table.insert(Messages.Cat, "They make a new thing, with CAT and KISS! But mostly CAT dont kiss, just jump on a thing and KILL IT ALL DEAD!")
-		table.insert(Messages.Cat, "But dont only kiss a cat, because u know: CAT IS 4 FITE!")
 	end
 
 	local DruidForms = {
@@ -173,8 +142,27 @@ if classIndex == 11 then
 			messageTable = Messages.Caster
 		end
 		local message = messageTable[math.random(#messageTable)]
+		if Settings.ChatType == 'SAY' or Settings.ChatType == 'YELL' then
+			print('Alamo: Blizzard no longer allows add-ons to send messages to SAY or YELL outdoors when not directly tied to a hardware event. I have changed your chat type to DYNAMIC for now. You can change it in Interface options.')
+			Settings.ChatType = 'DYNAMIC'
+		end
 		if Settings.ChatType == 'PRIVATE' then
 			print(message)
+		elseif Settings.ChatType == 'DYNAMIC' then
+			if UnitInBattleground("player") ~= nil then
+				SendChatMessage(message, 'INSTANCE_CHAT')
+			elseif IsInRaid(LE_PARTY_CATEGORY_HOME) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
+				SendChatMessage(message, 'RAID')
+			elseif IsInGroup(LE_PARTY_CATEGORY_HOME) or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+				SendChatMessage(message, 'PARTY')
+			else
+				local guildName, _, _, _ = GetGuildInfo('player')
+				if (guildName ~= nil) then
+					SendChatMessage(message, 'GUILD')
+				else
+					print(message)
+				end
+			end
 		else
 			SendChatMessage(message, Settings.ChatType)
 		end
@@ -332,10 +320,10 @@ if classIndex == 11 then
 				end
 			elseif command == 'chat' or command == 'chattype' then
 				if arguments == nil or arguments == '' then
-					print("Alamo's current chat is " .. Settings.ChatType .. '. You can choose GUILD, INSTANCE_CHAT, OFFICER, PARTY, PRIVATE, RAID, RAID_WARNING, SAY, WHISPER, or YELL.')
+					print("Alamo's current chat is " .. Settings.ChatType .. '. You can choose DYNAMIC, GUILD, INSTANCE_CHAT, OFFICER, PARTY, PRIVATE, RAID, RAID_WARNING, or WHISPER.')
 				else
 					local newChatType = string.upper(arguments)
-					if newChatType == 'GUILD' or newChatType == 'INSTANCE_CHAT' or newChatType == 'OFFICER' or newChatType == 'PARTY' or newChatType == 'PRIVATE' or newChatType == 'RAID' or newChatType == 'RAID_WARNING' or newChatType == 'SAY' or newChatType == 'WHISPER' or newChatType == 'YELL' then
+					if newChatType == 'DYNAMIC' or newChatType == 'GUILD' or newChatType == 'INSTANCE_CHAT' or newChatType == 'OFFICER' or newChatType == 'PARTY' or newChatType == 'PRIVATE' or newChatType == 'RAID' or newChatType == 'RAID_WARNING' or newChatType == 'WHISPER' then
 						Settings.ChatType = newChatType
 						print("Alamo's chat is now " .. Settings.ChatType .. '.')
 					else
@@ -410,6 +398,8 @@ if classIndex == 11 then
 	local function ChatDropdown_Menu(frame, level, menuList)
 		local info = UIDropDownMenu_CreateInfo()
 		info.func = ChatDropdown_OnClick
+ 		info.text, info.arg1 = "DYNAMIC", "DYNAMIC"
+ 		UIDropDownMenu_AddButton(info)
  		info.text, info.arg1 = "GUILD", "GUILD"
  		UIDropDownMenu_AddButton(info)
 		info.text, info.arg1 = "INSTANCE_CHAT", "INSTANCE_CHAT"
@@ -424,11 +414,7 @@ if classIndex == 11 then
 		UIDropDownMenu_AddButton(info)
 		info.text, info.arg1 = "RAID_WARNING", "RAID_WARNING"
 		UIDropDownMenu_AddButton(info)
-		info.text, info.arg1 = "SAY", "SAY"
-		UIDropDownMenu_AddButton(info)
 		info.text, info.arg1 = "WHISPER", "WHISPER"
-		UIDropDownMenu_AddButton(info)
-		info.text, info.arg1 = "YELL", "YELL"
 		UIDropDownMenu_AddButton(info)
 	end
 	local function DropdownOnShow(self)
