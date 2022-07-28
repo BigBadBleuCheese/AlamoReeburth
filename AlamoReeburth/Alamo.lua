@@ -149,7 +149,14 @@ if classIndex == 11 then
 		if Settings.ChatType == 'PRIVATE' then
 			print(message)
 		elseif Settings.ChatType == 'DYNAMIC' then
-			if UnitInBattleground("player") ~= nil then
+			local inInstance, _ = IsInInstance()
+			if inInstance then
+				if message:find('!') then
+					SendChatMessage(message, 'YELL')
+				else
+					SendChatMessage(message, 'SAY')
+				end
+			elseif UnitInBattleground("player") ~= nil then
 				SendChatMessage(message, 'INSTANCE_CHAT')
 			elseif IsInRaid(LE_PARTY_CATEGORY_HOME) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
 				SendChatMessage(message, 'RAID')
