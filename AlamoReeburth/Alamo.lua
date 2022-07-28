@@ -21,7 +21,8 @@ if classIndex == 11 then
 			"DURIDS IS 4 haf FUN TIME WIT FRENS",
 			"every1 is like a fun time durid!!",
 			"Durids is storng for bare or cat or seel or WHATVER",
-			"DURIDS IS ALWAYS FRENDS, SO PLAY NISE, OK?"
+			"DURIDS IS ALWAYS FRENDS, SO PLAY NISE, OK?",
+			"DURIDS IS HARD, & BUT STRONG"
 		},
 
 		Bear = {
@@ -73,10 +74,40 @@ if classIndex == 11 then
 		}
 	}
 
+	if isClassic then
+		table.insert(Messages.Bear, "SUM PEEPLE THINK DURIDS IS CANT BE BARE AND CAN ONLY HEEL AND THEM DOSENT")
+	end
+
 	if not isClassic then
 		table.insert(Messages.Bear, "ONE THING NOW IS BARES IS CAN DUNCE! DUN DUN DUN! LOL!")
+		table.insert(Messages.Bear, "DUNCING BARES IS CAN MAKE HAPPY TIMES FOR UDDER FRENDS!")
 		table.insert(Messages.Bear, "IS YOU LIEK A NISE HOT CUP O MANGEL?")
+		table.insert(Messages.Bear, "NOW BARE DURIDS IS CAN TANK GOOD!")
+		table.insert(Messages.Bear, "REMEMBERS- HEEL BARES DURID! BARE DURIDS IS STORNG FREND!")
+		table.insert(Messages.Caster, "DURIDS IS ALSO VERY STORNG 4 PVP! BARES AND CATS FITE, MOONKIN MAKES MOON STUFF, AND SUM DURIDS IS 4 HEEL!")
+		table.insert(Messages.Caster, "DON'T BE SCARED OF FITE, ONLY REMEMBER IMPORTANT DURID STUFF!")
+		table.insert(Messages.Caster, "REMEMBER, DURIDS IS BEST!")
+		table.insert(Messages.Caster, "WHEN U IS HAF SUM FUN, ALL DURIDS IS HAF SUM FUN WIT U!!")
 		table.insert(Messages.Cat, "cat durids is love some mangel!")
+	end
+
+	if isBCC then
+		table.insert(Messages.Caster, "now, in BURN CROOSAID, is many things new durids is can do, what wuzznt cood do B4!")
+	end
+
+	if isWotLKC or isRetail then
+		table.insert(Messages.Moonkin, "But Crazed MOON DURID, is ok to make a kiss right on the ECLIPS!")
+	end
+	
+	if isRetail then
+		table.insert(Messages.Bear, "OK now a Bare, him like sum HEVY METAL! BARE GOTTA THRASH. Just liek a thing wares short and high top sneeker and shake long hare reeeely fast!")
+		table.insert(Messages.Bear, "But also, ware sum plug in an ear wen you make this THRASH, becawse it make a thing bleed!")
+		table.insert(Messages.Bear, "Also, all bare make peeple go fast when him RORE!! This is good, because a bare is deseptively fast. A Fast BARE, this is danjerus BARE!")
+		table.insert(Messages.Bear, "Bare don't even allow in OLIMPIC, becawse wonse upon a time, a bare run a rase in OLIMPIC. Maybe he dosen't win, but everduddy win after, becawse a BARE EAT ALL OTHER RASE MEN!")
+		table.insert(Messages.Bear, "Don't rase a hungry bare, is what sumbuddy shuld tell peeple.")
+		table.insert(Messages.Caster, "So DURID gonna be so storng heer, maybe everbuddy gonna be a durid thees day!")
+		table.insert(Messages.Cat, "They make a new thing, with CAT and KISS! But mostly CAT dont kiss, just jump on a thing and KILL IT ALL DEAD!")
+		table.insert(Messages.Cat, "But dont only kiss a cat, because u know: CAT IS 4 FITE!")
 	end
 
 	local DruidForms = {
