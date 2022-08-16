@@ -1,7 +1,7 @@
 ## Interface: 30400
 ## Title: Alamo Reeburth
 ## Notes: ALAMO teeches u 2 Burnin Croosaid!
-## Version: 1.2
+## Version: 1.3
 ## SavedVariablesPerCharacter: Settings
 
 Alamo.lua
