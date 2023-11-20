@@ -1,13 +1,13 @@
-local _, _, classIndex = UnitClass('player')
-if classIndex == 11 then
+local _, _, classIndexx = UnitClass('player')
+if classIndexx == 11 then
 	local interfaceVersion = select(4, GetBuildInfo())
 	local isClassic = interfaceVersion < 20000
 	local isBCC = interfaceVersion >= 20000 and interfaceVersion < 30000
 	local isWotLKC = interfaceVersion >= 30000 and interfaceVersion < 40000
 	local isRetail = not (isClassic or isBCC or isWotLKC)
 
-	if Settings == nil then
-		Settings = {
+	if Settingss == nil then
+		Settingss = {
 			Enabled = true,
 			Chance = 5,
 			ChatType = 'DYNAMIC'
@@ -144,9 +144,9 @@ if classIndex == 11 then
 	local CurrentIncarnationTreeOfLifeActive = false
 	local ToSpeakOnNextUpdate = nil
 	local WaitToSpeakOnNextUpdateUntil = nil
-	local index = GetShapeshiftForm()
-	if index > 0 then
-		local texture, name, isActive, isCastable, spellID = GetShapeshiftFormInfo(index)
+	local indexx = GetShapeshiftForm()
+	if indexx > 0 then
+		local texture, name, isActive, isCastable, spellID = GetShapeshiftFormInfo(indexx)
 		if spellID then
 			CurrentForm = spellID
 		end
@@ -173,13 +173,16 @@ if classIndex == 11 then
 			messageTable = Messages.Caster
 		end
 		local message = messageTable[math.random(#messageTable)]
-		if Settings.ChatType == 'SAY' or Settings.ChatType == 'YELL' then
+		if Settingss.ChatType == 'SAY' or Settingss.ChatType == 'YELL' then
 			print('Alamo: Blizzard no longer allows add-ons to send messages to SAY or YELL outdoors when not directly tied to a hardware event. I have changed your chat type to DYNAMIC for now. You can change it in Interface options.')
-			Settings.ChatType = 'DYNAMIC'
+			Settingss.ChatType = 'DYNAMIC'
 		end
-		if Settings.ChatType == 'PRIVATE' then
+		if Settingss.ChatType == 'EMOTE' then
+			DoEmote(message)
+		end
+		if Settingss.ChatType == 'PRIVATE' then
 			print(message)
-		elseif Settings.ChatType == 'DYNAMIC' then
+		elseif Settingss.ChatType == 'DYNAMIC' then
 			local inInstance, _ = IsInInstance()
 			if inInstance then
 				if message:find('!') then
@@ -202,12 +205,12 @@ if classIndex == 11 then
 				end
 			end
 		else
-			SendChatMessage(message, Settings.ChatType)
+			SendChatMessage(message, Settingss.ChatType)
 		end
 	end
 
 	local function RollToSpeak(spellID)
-		if Settings.Enabled and math.random(100) <= Settings.Chance then
+		if Settingss.Enabled and math.random(100) <= Settingss.Chance then
 			ToSpeakOnNextUpdate = spellID
 			WaitToSpeakOnNextUpdateUntil = GetTime() + 0.5
 		end
@@ -215,9 +218,9 @@ if classIndex == 11 then
 
 	local function ChangedForm()
 		local spellID
-		local index = GetShapeshiftForm()
-		if index > 0 then
-			_, _, _, spellID = GetShapeshiftFormInfo(index)
+		local indexx = GetShapeshiftForm()
+		if indexx > 0 then
+			_, _, _, spellID = GetShapeshiftFormInfo(indexx)
 			if spellID == DruidForms.DireBear then
 				spellID = DruidForms.Bear
 			elseif spellID == DruidForms.Travel and isRetail then
@@ -255,14 +258,14 @@ if classIndex == 11 then
 	end
 
 	local function IsIncarnationTreeOfLifeActive()
-		local buffIndex = 1
-		local name, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff('player', buffIndex)
+		local buffIndexx = 1
+		local name, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff('player', buffIndexx)
 		while name do
 			if spellId == IncarnationTreeOfLife then
 				return true
 			end
-			buffIndex = buffIndex + 1
-			name, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff('player', buffIndex)
+			buffIndexx = buffIndexx + 1
+			name, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitBuff('player', buffIndexx)
 		end
 		return false
 	end
@@ -279,7 +282,7 @@ if classIndex == 11 then
 	local AlamoFrame = CreateFrame('Frame')
 	AlamoFrame:RegisterEvent('UNIT_AURA')
 	AlamoFrame:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
-	AlamoFrame:SetScript('OnEvent', function(self, event, ...)
+	AlamoFrame:SetScript('OnEvent', function(__, event, ...)
 		if event == 'UNIT_AURA' then
 			local unitID = ...
 			if unitID == 'player' then
@@ -319,32 +322,32 @@ if classIndex == 11 then
 					Speak(CurrentForm)
 				end
 			elseif command == 'on' then
-				if Settings.Enabled then
-					print('Alamo is already on with a ' .. Settings.Chance .. '% chance to speak when you shapeshift.')
+				if Settingss.Enabled then
+					print('Alamo is already on with a ' .. Settingss.Chance .. '% chance to speak when you shapeshift.')
 				else
-					Settings.Enabled = true
-					print('Alamo is now on with a ' .. Settings.Chance .. '% chance to speak when you shapeshift.')
+					Settingss.Enabled = true
+					print('Alamo is now on with a ' .. Settingss.Chance .. '% chance to speak when you shapeshift.')
 				end
 			elseif command == 'off' then
-				if Settings.Enabled then
-					Settings.Enabled = false
+				if Settingss.Enabled then
+					Settingss.Enabled = false
 					print('Alamo is now off.')
 				else
 					print('Alamo is already off.')
 				end
 			elseif command == 'chance' then
 				if arguments == nil or arguments == '' then
-					if Settings.Enabled then
-						print('Alamo has a ' .. Settings.Chance .. '% chance to speak when you shapeshift.')
+					if Settingss.Enabled then
+						print('Alamo has a ' .. Settingss.Chance .. '% chance to speak when you shapeshift.')
 					else
-						print('Alamo will have a ' .. Settings.Chance .. '% chance to speak when you shapeshift if you enable it.')
+						print('Alamo will have a ' .. Settingss.Chance .. '% chance to speak when you shapeshift if you enable it.')
 					end
 				else
 					local newChance = tonumber(arguments)
 					if newChance ~= nil then
 						if newChance >= 0 and newChance <= 100 then
-							Settings.Chance = newChance
-							if Settings.Enabled then
+							Settingss.Chance = newChance
+							if Settingss.Enabled then
 								print('Alamo now has a ' .. newChance .. '% chance to speak when you shapeshift.')
 							else
 								print('Alamo will now have a ' .. newChance .. '% chance to speak when you shapeshift if you enable it.')
@@ -358,12 +361,12 @@ if classIndex == 11 then
 				end
 			elseif command == 'chat' or command == 'chattype' then
 				if arguments == nil or arguments == '' then
-					print("Alamo's current chat is " .. Settings.ChatType .. '. You can choose DYNAMIC, GUILD, INSTANCE_CHAT, OFFICER, PARTY, PRIVATE, RAID, RAID_WARNING, or WHISPER.')
+					print("Alamo's current chat is " .. Settingss.ChatType .. '. You can choose DYNAMIC, EMOTE, GUILD, INSTANCE_CHAT, OFFICER, PARTY, PRIVATE, RAID, RAID_WARNING, or WHISPER.')
 				else
 					local newChatType = string.upper(arguments)
-					if newChatType == 'DYNAMIC' or newChatType == 'GUILD' or newChatType == 'INSTANCE_CHAT' or newChatType == 'OFFICER' or newChatType == 'PARTY' or newChatType == 'PRIVATE' or newChatType == 'RAID' or newChatType == 'RAID_WARNING' or newChatType == 'WHISPER' then
-						Settings.ChatType = newChatType
-						print("Alamo's chat is now " .. Settings.ChatType .. '.')
+					if newChatType == 'DYNAMIC' or newChatType == 'EMOTE' or newChatType == 'GUILD' or newChatType == 'INSTANCE_CHAT' or newChatType == 'OFFICER' or newChatType == 'PARTY' or newChatType == 'PRIVATE' or newChatType == 'RAID' or newChatType == 'RAID_WARNING' or newChatType == 'WHISPER' then
+						Settingss.ChatType = newChatType
+						print("Alamo's chat is now " .. Settingss.ChatType .. '.')
 					else
 						print('That is not an acceptable chat type.');
 					end
@@ -382,21 +385,21 @@ if classIndex == 11 then
 	local chatDropdown = CreateFrame("Frame", "AlamoOptionsChatDropdown", AlamoOptions, "UIDropDownMenuTemplate")
 
 	local function CheckboxOnClick(self)
-		Settings.Enabled = self:GetChecked()
-		PlaySound(Settings.Enabled and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
-		self:SetChecked(Settings.Enabled)
+		Settingss.Enabled = self:GetChecked()
+		PlaySound(Settingss.Enabled and SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON or SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+		self:SetChecked(Settingss.Enabled)
 	end
 	
 	local function CheckBoxOnShow(self)
-		self:SetChecked(Settings.Enabled)
+		self:SetChecked(Settingss.Enabled)
 	end
 
 	local function SliderOnShow(self)
-		chanceSlider:SetValue(Settings.Chance)
+		chanceSlider:SetValue(Settingss.Chance)
 	end
 	
 	local function SliderOnChange(self)
-		Settings.Chance = self:GetValue()
+		Settingss.Chance = self:GetValue()
 	end
 
 	AlamoOptions:Hide()
@@ -407,14 +410,22 @@ if classIndex == 11 then
 	title:SetText(AlamoOptions.name)
 	InterfaceOptions_AddCategory(AlamoOptions, addonName)
 
-	--Enable Checkbox--
+--	--Enable Checkbox--
 	enableButton:SetScript('OnShow', CheckBoxOnShow)
 	enableButton:SetScript('OnClick', CheckboxOnClick)
 	getglobal(enableButton:GetName() .. 'Text'):SetText("Enable Alamo");
 	enableButton.tooltipText = 'Enable Alamo Dialogue'
 	enableButton:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
 
-	--Chance Slider--
+--	--Chance Slider--
+--	chanceSlider:SetWidth(20)
+--	chanceSlider:SetHeight(100)
+	chanceSlider:SetOrientation('HORIZONTAL')
+	chanceSlider:Show()
+	chanceSlider.tooltipText = 'This is the Tooltip hint'   -- Creates a tooltip on mouseover.
+	_G[chanceSlider:GetName() .. 'Low']:SetText('1')        -- Sets the left-side slider text (default is "Low").
+	_G[chanceSlider:GetName() .. 'High']:SetText('100')     -- Sets the right-side slider text (default is "High").
+	_G[chanceSlider:GetName() .. 'Text']:SetText('5')       -- Sets the "title" text (top-centre of slider).
 	chanceSlider:SetScript('OnShow', SliderOnShow)
 	chanceSlider:SetScript('OnValueChanged', SliderOnChange)
 	chanceSlider:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -54)
@@ -423,20 +434,22 @@ if classIndex == 11 then
 	chanceSlider:SetObeyStepOnDrag(true)
 	getglobal(chanceSlider:GetName() .. 'Text'): SetText("Chance to Speak")
 
-	--chat channel dropdown--
+--	--chat channel dropdown--
 	local chatDropdownLabel = AlamoOptions:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
 	chatDropdownLabel:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -94)
 	chatDropdownLabel:SetText("Chat Channel:")
 
 	chatDropdown:SetPoint("TOPLEFT", chatDropdownLabel, "BOTTOMLEFT", -16, -4)
 	local function ChatDropdown_OnClick(self, arg1, arg2, checked)
-		Settings.ChatType = arg1
-		UIDropDownMenu_SetText(chatDropdown, Settings.ChatType)
+		Settingss.ChatType = arg1
+		UIDropDownMenu_SetText(chatDropdown, Settingss.ChatType)
 	end
 	local function ChatDropdown_Menu(frame, level, menuList)
 		local info = UIDropDownMenu_CreateInfo()
 		info.func = ChatDropdown_OnClick
- 		info.text, info.arg1 = "DYNAMIC", "DYNAMIC"
+		info.text, info.arg1 = "DYNAMIC", "DYNAMIC"
+		UIDropDownMenu_AddButton(info)
+		info.text, info.arg1 = "EMOTE", "EMOTE"
  		UIDropDownMenu_AddButton(info)
  		info.text, info.arg1 = "GUILD", "GUILD"
  		UIDropDownMenu_AddButton(info)
@@ -456,7 +469,7 @@ if classIndex == 11 then
 		UIDropDownMenu_AddButton(info)
 	end
 	local function DropdownOnShow(self)
-		UIDropDownMenu_SetText(self, Settings.ChatType)
+		UIDropDownMenu_SetText(self, Settingss.ChatType)
 	end
 	UIDropDownMenu_Initialize(chatDropdown, ChatDropdown_Menu)
 	chatDropdown:SetScript('OnShow', DropdownOnShow)
